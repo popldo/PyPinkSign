@@ -81,7 +81,7 @@ class PinkSign:
             d = open(self.pubkey_path, 'rb').read()
         self.pub_cert = der_decoder.decode(d)[0]
         # (n, e)
-        self.pubkey = RSA.construct((long(get_pubkey_from_pub(self.pub_cert)), long(get_pub_e_from_pub(self.pub_cert))))
+        self.pubkey = RSA.construct((int(get_pubkey_from_pub(self.pub_cert)), int(get_pub_e_from_pub(self.pub_cert))))
         pass
 
     def load_prikey(self, prikey_path=None, prikey_data=None, prikey_password=None):
@@ -135,7 +135,7 @@ class PinkSign:
         der_pri2 = der_decoder.decode(der_pri[0][2])
 
         # (n, e, d, p, q)
-        rsa_keys = (long(der_pri2[0][1]), long(der_pri2[0][2]), long(der_pri2[0][3]), long(der_pri2[0][4]), long(der_pri2[0][5]))
+        rsa_keys = (int(der_pri2[0][1]), int(der_pri2[0][2]), int(der_pri2[0][3]), int(der_pri2[0][4]), int(der_pri2[0][5]))
         self.prikey = RSA.construct(rsa_keys)
         self._rand_num = der_pri[0][3][1][0]  # so raw data, can't be eaten
         pass
@@ -360,9 +360,9 @@ def choose_cert(basepath=None, dn=None, pw=None):
     i = 1
     for cert in cert_list:
         (dn, (valid_from, valid_until), issuer) = (cert.dn(), cert.valid_date(), cert.issuer())
-        print "[%d] %s (%s ~ %s) issued by %s" % (i, dn, valid_from, valid_until, issuer)
+        print("[%d] %s (%s ~ %s) issued by %s" % (i, dn, valid_from, valid_until, issuer))
         i += 1
-    i = int(raw_input("Choose your certifiacte: "))
+    i = int(input("Choose your certifiacte: "))
     return cert_list[i - 1]
 
 
